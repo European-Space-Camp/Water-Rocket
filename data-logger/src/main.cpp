@@ -2,7 +2,7 @@
 #include <Wire.h>
 #include <SPI.h>
 #include <Adafruit_Sensor.h>
-#include <Adafruit_BMP280.h>
+#include "Adafruit_BMP280.h"
 #include "MPU9250.h"
 #include <SD.h>
 
