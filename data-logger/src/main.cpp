@@ -6,11 +6,14 @@
 #include "MPU9250.h"
 #include <SD.h>
 
+#define sampleRate 0   // ms
+
 MPU9250 mpu;
 Adafruit_BMP280 bme;
 
 double groundPressure; //hPa
 char filename[16];
+
 
 void writeToFile(const String& dataString);
   
@@ -84,7 +87,7 @@ void loop() {
 
   writeToFile(dataString);
 
-  delay(1000);
+  delay(sampleRate);
 }
 
 void writeToFile(const String& dataString){
