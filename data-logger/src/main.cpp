@@ -6,7 +6,15 @@
 #include "MPU9250.h"
 #include <SD.h>
 
+#define DEBUG false
+
 #define sampleRate 0   // ms
+
+#if DEBUG
+  #define DEBUG_PRINT(x) Serial.println(x)
+#else
+  #define DEBUG_PRINT(x)
+#endif
 
 MPU9250 mpu;
 Adafruit_BMP280 bme;
@@ -22,16 +30,18 @@ void setup() {
   digitalWrite(LED_BUILTIN, HIGH);
   delay(1000);
 
-  // Serial.begin(9600);
-  // while(!Serial);
-  // Serial.println("SETTING UP\n");
+  #if DEBUG
+    Serial.begin(9600);
+    while(!Serial);
+    Serial.println("SETTING UP\n");
+  #endif
   
   if (!bme.begin()) {  
-    // Serial.println("Could not find a valid BMP280 sensor, check adress!");
+    DEBUG_PRINT("Could not find a valid BMP280 sensor, check adress!");
     while (1);
   }
   if (!mpu.begin()){
-    // Serial.println("Could not find a valid IMU9250 sensor, check adress!");
+    DEBUG_PRINT("Could not find a valid IMU9250 sensor, check adress!");
     while (1);
   }
 
@@ -41,10 +51,10 @@ void setup() {
   groundPressure = bme.readPressure()/100;
 
   if (!SD.begin(SS1)) {
-    // Serial.println("Card failed, or not present");
+    DEBUG_PRINT("Card failed, or not present");
     while(1);
   }
-  // Serial.println("card initialized.");
+  DEBUG_PRINT("card initialized.");
 
   int n = 0;
   snprintf(filename, sizeof(filename), "data%03d.txt", n);
@@ -96,11 +106,11 @@ void writeToFile(const String& dataString){
   if (dataFile) {
     dataFile.println(dataString);
     dataFile.close();
-    // print to the serial port too:
-    // Serial.println(dataString);
+    DEBUG_PRINT(dataString);
   }
   else {
-    // Serial.println("error opening datalog.txt");
+    DEBUG_PRINT("error opening datalog.txt");
+    digitalWrite(LED_BUILTIN, HIGH);
   }
 }
 
