@@ -63,36 +63,36 @@ void setup() {
     snprintf(filename, sizeof(filename), "data%03d.txt", n);
   }
 
-  writeToFile("Pressure(Pa) Alt(m) Accel(G)-X-Y-Z Gyro(º/s)-X-Y-Z Temperature(*C)-bme-imu");
+  writeToFile("Time[s]\tPressure[Pa]\tAlt[m]\tAcc_x[G]\tAcc_y[G]\tAcc_z[G]\tGyro_x[º/s]\tGyro_y[º/s]\tGyro_z[º/s]\tTemp_bme[*C]\tTemp_imu[*C]");
   digitalWrite(LED_BUILTIN, LOW);
 }
 
 void loop() {
   String dataString;
   dataString += String(millis()/1000.0);
-  dataString += " ";
+  dataString += "\t";
   dataString += String(bme.readPressure());
-  dataString += " ";
+  dataString += "\t";
   dataString += String(bme.readAltitude(groundPressure));
-  dataString += " ";
+  dataString += "\t";
   
   mpu.get_accel_g();
   dataString += String(mpu.x_g,2);
-  dataString += " ";
+  dataString += "\t";
   dataString += String(mpu.y_g,2);
-  dataString += " ";
+  dataString += "\t";
   dataString += String(mpu.z_g,2);
-  dataString += " ";
+  dataString += "\t";
 
   mpu.get_gyro_d();
   dataString += String(mpu.gx_d,2);
-  dataString += " ";
+  dataString += "\t";
   dataString += String(mpu.gy_d,2);
-  dataString += " ";
+  dataString += "\t";
   dataString += String(mpu.gz_d,2);
-  dataString += " ";
+  dataString += "\t";
   dataString += String(bme.readTemperature());
-  dataString += " ";
+  dataString += "\t";
   dataString += String(mpu.get_temp() / 333.87 + 21.0,1);
 
   writeToFile(dataString);
