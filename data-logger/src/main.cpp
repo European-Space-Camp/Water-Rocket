@@ -6,7 +6,7 @@
 #include "MPU9250.h"
 #include <SD.h>
 
-#define SERIAL_CONNECT false
+#define SERIAL_CONNECT true
 
 #define sampleRate 0   // ms
 
@@ -38,11 +38,11 @@ void setup() {
   
   if (!bme.begin()) {  
     SERIAL_PRINT("Could not find a valid BMP280 sensor, check adress!");
-    while (1);
+    // while (1);
   }
   if (!mpu.begin()){
     SERIAL_PRINT("Could not find a valid IMU9250 sensor, check adress!");
-    while (1);
+    while(1);
   }
 
   mpu.set_accel_range(RANGE_2G);
