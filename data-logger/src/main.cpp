@@ -2,15 +2,26 @@
 #include <Wire.h>
 #include <SPI.h>
 #include <Adafruit_Sensor.h>
-#include <Adafruit_BMP280.h>
+#include "Adafruit_BMP280.h"
 #include "MPU9250.h"
 #include <SD.h>
+
+#define SERIAL_CONNECT false
+
+#define sampleRate 0   // ms
+
+#if SERIAL_CONNECT
+  #define SERIAL_PRINT(x) Serial.println(x)
+#else
+  #define SERIAL_PRINT(x)
+#endif
 
 MPU9250 mpu;
 Adafruit_BMP280 bme;
 
 double groundPressure; //hPa
 char filename[16];
+
 
 void writeToFile(const String& dataString);
   
@@ -19,16 +30,18 @@ void setup() {
   digitalWrite(LED_BUILTIN, HIGH);
   delay(1000);
 
-  // Serial.begin(9600);
-  // while(!Serial);
-  // Serial.println("SETTING UP\n");
+  #if SERIAL_CONNECT
+    Serial.begin(9600);
+    while(!Serial);
+    Serial.println("SETTING UP\n");
+  #endif
   
   if (!bme.begin()) {  
-    // Serial.println("Could not find a valid BMP280 sensor, check adress!");
+    SERIAL_PRINT("Could not find a valid BMP280 sensor, check adress!");
     while (1);
   }
   if (!mpu.begin()){
-    // Serial.println("Could not find a valid IMU9250 sensor, check adress!");
+    SERIAL_PRINT("Could not find a valid IMU9250 sensor, check adress!");
     while (1);
   }
 
@@ -38,10 +51,10 @@ void setup() {
   groundPressure = bme.readPressure()/100;
 
   if (!SD.begin(SS1)) {
-    // Serial.println("Card failed, or not present");
+    SERIAL_PRINT("Card failed, or not present");
     while(1);
   }
-  // Serial.println("card initialized.");
+  SERIAL_PRINT("card initialized.");
 
   int n = 0;
   snprintf(filename, sizeof(filename), "data%03d.txt", n);
@@ -84,7 +97,7 @@ void loop() {
 
   writeToFile(dataString);
 
-  delay(1000);
+  delay(sampleRate);
 }
 
 void writeToFile(const String& dataString){
@@ -93,30 +106,10 @@ void writeToFile(const String& dataString){
   if (dataFile) {
     dataFile.println(dataString);
     dataFile.close();
-    // print to the serial port too:
-    // Serial.println(dataString);
+    SERIAL_PRINT(dataString);
   }
   else {
-    // Serial.println("error opening datalog.txt");
+    SERIAL_PRINT("error opening datalog.txt");
+    digitalWrite(LED_BUILTIN, HIGH);
   }
-}
-
-  
-    //Mag not working
-
-    // mpu.set_mag_scale(SCALE_14_BITS);
-    // mpu.set_mag_speed(MAG_8_Hz);
-    // if(!mpu.get_mag()){
-    //   Serial.print("MX: ");  Serial.print(mpu.mx); 
-    //   Serial.print(" MY: "); Serial.print(mpu.my); 
-    //   Serial.print(" MZ: "); Serial.print(mpu.mz);
-
-    //   mpu.get_mag_t();
-    //   Serial.print(" MX_t: "); Serial.print(mpu.mx_t,2); 
-    //   Serial.print(" MY_t: "); Serial.print(mpu.my_t,2); 
-    //   Serial.print(" MZ_t: "); Serial.print(mpu.mz_t,2); Serial.println(" uT");
-    // }
-    // else{
-    //   // |X|+|Y|+|Z| must be < 4912μT to sensor measure correctly 
-    //   Serial.println("Overflow no magnetometro.");
-    // }    
+} 
