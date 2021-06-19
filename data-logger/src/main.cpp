@@ -6,14 +6,14 @@
 #include "MPU9250.h"
 #include <SD.h>
 
-#define DEBUG false
+#define SERIAL_CONNECT false
 
 #define sampleRate 0   // ms
 
-#if DEBUG
-  #define DEBUG_PRINT(x) Serial.println(x)
+#if SERIAL_CONNECT
+  #define SERIAL_PRINT(x) Serial.println(x)
 #else
-  #define DEBUG_PRINT(x)
+  #define SERIAL_PRINT(x)
 #endif
 
 MPU9250 mpu;
@@ -30,18 +30,18 @@ void setup() {
   digitalWrite(LED_BUILTIN, HIGH);
   delay(1000);
 
-  #if DEBUG
+  #if SERIAL_CONNECT
     Serial.begin(9600);
     while(!Serial);
     Serial.println("SETTING UP\n");
   #endif
   
   if (!bme.begin()) {  
-    DEBUG_PRINT("Could not find a valid BMP280 sensor, check adress!");
+    SERIAL_PRINT("Could not find a valid BMP280 sensor, check adress!");
     while (1);
   }
   if (!mpu.begin()){
-    DEBUG_PRINT("Could not find a valid IMU9250 sensor, check adress!");
+    SERIAL_PRINT("Could not find a valid IMU9250 sensor, check adress!");
     while (1);
   }
 
@@ -51,10 +51,10 @@ void setup() {
   groundPressure = bme.readPressure()/100;
 
   if (!SD.begin(SS1)) {
-    DEBUG_PRINT("Card failed, or not present");
+    SERIAL_PRINT("Card failed, or not present");
     while(1);
   }
-  DEBUG_PRINT("card initialized.");
+  SERIAL_PRINT("card initialized.");
 
   int n = 0;
   snprintf(filename, sizeof(filename), "data%03d.txt", n);
@@ -106,10 +106,10 @@ void writeToFile(const String& dataString){
   if (dataFile) {
     dataFile.println(dataString);
     dataFile.close();
-    DEBUG_PRINT(dataString);
+    SERIAL_PRINT(dataString);
   }
   else {
-    DEBUG_PRINT("error opening datalog.txt");
+    SERIAL_PRINT("error opening datalog.txt");
     digitalWrite(LED_BUILTIN, HIGH);
   }
 }
