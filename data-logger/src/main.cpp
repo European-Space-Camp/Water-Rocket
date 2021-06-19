@@ -112,24 +112,4 @@ void writeToFile(const String& dataString){
     SERIAL_PRINT("error opening datalog.txt");
     digitalWrite(LED_BUILTIN, HIGH);
   }
-}
-
-  
-    //Mag not working
-
-    // mpu.set_mag_scale(SCALE_14_BITS);
-    // mpu.set_mag_speed(MAG_8_Hz);
-    // if(!mpu.get_mag()){
-    //   Serial.print("MX: ");  Serial.print(mpu.mx); 
-    //   Serial.print(" MY: "); Serial.print(mpu.my); 
-    //   Serial.print(" MZ: "); Serial.print(mpu.mz);
-
-    //   mpu.get_mag_t();
-    //   Serial.print(" MX_t: "); Serial.print(mpu.mx_t,2); 
-    //   Serial.print(" MY_t: "); Serial.print(mpu.my_t,2); 
-    //   Serial.print(" MZ_t: "); Serial.print(mpu.mz_t,2); Serial.println(" uT");
-    // }
-    // else{
-    //   // |X|+|Y|+|Z| must be < 4912μT to sensor measure correctly 
-    //   Serial.println("Overflow no magnetometro.");
-    // }    
+} 
