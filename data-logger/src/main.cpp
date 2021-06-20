@@ -45,8 +45,8 @@ void setup() {
     while (1);
   }
 
-  mpu.set_accel_range(RANGE_2G);
-  mpu.set_gyro_range(RANGE_GYRO_250);
+  mpu.set_accel_range(RANGE_16G);
+  mpu.set_gyro_range(RANGE_GYRO_2000);
 
   groundPressure = bme.readPressure()/100;
 
