@@ -77,11 +77,11 @@ void loop() {
   dataString += "\t";
   
   mpu.get_accel_g();
-  dataString += String(mpu.x_g,2);
+  dataString += String(-mpu.x_g,2);
   dataString += "\t";
-  dataString += String(mpu.y_g,2);
+  dataString += String(-mpu.y_g,2);
   dataString += "\t";
-  dataString += String(mpu.z_g,2);
+  dataString += String(-mpu.z_g,2);
   dataString += "\t";
 
   mpu.get_gyro_d();
